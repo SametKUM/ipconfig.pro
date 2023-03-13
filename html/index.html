@@ -2,13 +2,12 @@
 <html lang="en">
   <head>
     <meta charset="utf-8" />
-    <title>What is my IP address? &mdash; {{ .Host }}</title>
+    <title>IP Adresim nedir? &mdash; {{ .Host }}</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta
       name="description"
-      content="{{ .Host }} • What is my IP address? &mdash; The best tool to find your own IP address, and information about it."
+      content="{{ .Host }} • IP Adresim nedir? &mdash; Kendi IP adresinizi ve onunla ilgili bilgileri bulmak için en iyi araç."
     />
-    <link rel="canonical" href="https://ifconfig.co/" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
       href="https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,400;0,700;1,400&display=swap"
@@ -34,11 +33,10 @@
       <div class="pure-g gutters center">
         <div class="pure-u-1 pure-u-md-2-3">
           <div class="l-box">
-            <h1>{{ .Host }} — What is my IP address?</h1>
+            <h1>{{ .Host }} — IP Adresim nedir?</h1>
             <p><code class="ip">{{ .IP }}</code></p>
             <p>
-              The best tool to find your own IP address, and information about
-              it.
+              Kendi IP adresinizi ve onunla ilgili bilgileri bulmak için en iyi araç.
             </p>
           </div>
         </div>
@@ -71,30 +69,21 @@
         <!-- COLUMN 1 -->
         <div class="pure-u-1 pure-u-md-1-2 col">
           <div class="l-box">
-            <h2>What do we know about this IP address?</h2>
+            <h2>Bu IP adresi hakkında neler biliyoruz?</h2>
             <table class="info-table">
               <tr>
-                <th scope="row">IP&nbsp;address</th>
+                <th scope="row">IP&nbsp;adresim</th>
                 <td>{{ .IP }}</td>
-              </tr>
-              <tr>
-                <th scope="row">IP&nbsp;address (decimal)</th>
-                <td>{{ .IPDecimal }}</td>
               </tr>
               {{ if .Country }}
               <tr>
-                <th scope="row">Country</th>
+                <th scope="row">Ülke</th>
                 <td>{{ .Country }}</td>
               </tr>
               {{ end }} {{ if .CountryISO }}
               <tr>
-                <th scope="row">Country (ISO code)</th>
+                <th scope="row">Ülke (ISO)</th>
                 <td>{{ .CountryISO }}</td>
-              </tr>
-              {{ end }} {{ if .CountryEU }}
-              <tr>
-                <th scope="row">In EU?</th>
-                <td>{{ .CountryEU }}</td>
               </tr>
               {{ end }} {{ if .RegionName }}
               <tr>
@@ -118,22 +107,22 @@
               </tr>
               {{ end }} {{ if .City }}
               <tr>
-                <th scope="row">City</th>
+                <th scope="row">Şehir</th>
                 <td>{{ .City }}</td>
               </tr>
               {{ end }} {{ if .Latitude }}
               <tr>
-                <th scope="row">Latitude</th>
+                <th scope="row">Enlem</th>
                 <td>{{ .Latitude }}</td>
               </tr>
               {{ end }} {{ if .Longitude }}
               <tr>
-                <th scope="row">Longitude</th>
+                <th scope="row">Boylam</th>
                 <td>{{ .Longitude }}</td>
               </tr>
               {{ end }} {{ if .Timezone }}
               <tr>
-                <th scope="row">Timezone</th>
+                <th scope="row">Saat dilimi</th>
                 <td>{{ .Timezone }}</td>
               </tr>
               {{ end }} {{ if .ASN }}
@@ -168,35 +157,14 @@
               </tr>
               {{ end }} {{ end }}
             </table>
-            {{ if .Country }}
-            <p>
-              This information is provided from the GeoLite2 database created by
-              MaxMind, available from
-              <a href="https://www.maxmind.com">www.maxmind.com</a>
-            </p>
-            {{ end }} {{ if .Latitude }}
-            <div class="pure-u-1 pure-u-md-1-1">
-              <h2>Map</h2>
-              <iframe
-                width="100%"
-                height="350"
-                frameborder="0"
-                scrolling="no"
-                marginheight="0"
-                marginwidth="0"
-                src="https://www.openstreetmap.org/export/embed.html?bbox={{ .BoxLonLeft }}%2C{{ .BoxLatBottom }}%2C{{ .BoxLonRight }}%2C{{ .BoxLatTop }}&amp;layer=mapnik&amp;marker={{ .Latitude }}%2C{{ .Longitude }}"
-              ></iframe>
-            </div>
-            {{ end }}
           </div>
         </div>
         <!-- COLUMN 2 -->
         <div class="pure-u-1 pure-u-md-1-2">
           <div class="l-box">
-            <h2>How do I get this programmatically?</h2>
+            <h2>Programlanabilir olarak nasıl kullanabilirim?</h2>
             <p>
-              With the widget below you can build your query, and see what the
-              result will look like.
+              Aşağıdaki araç ile sorgunuzu oluşturabilir ve sonucun nasıl görüneceğini görebilirsiniz.
             </p>
             <div class="pure-form">
               <!-- COMMAND WIDGET -->
@@ -213,21 +181,21 @@
                   class="pure-button widget-select"
                   onclick="changeInput(this.name, this)"
                 >
-                  country
+                  ülke
                 </button>
                 <button
                   name="country-iso"
                   class="pure-button widget-select"
                   onclick="changeInput(this.name, this)"
                 >
-                  country-iso
+                  ülke-iso
                 </button>
                 <button
                   name="city"
                   class="pure-button widget-select"
                   onclick="changeInput(this.name, this)"
                 >
-                  city
+                  şehir
                 </button>
                 <button
                   name="asn"
@@ -269,12 +237,12 @@
               <form class="pure-form input-buttons">
                 <fieldset>
                   <label for="ipInput">
-                    Check another IP (optional)
+                    Başka bir IP'yi kontrol edin (isteğe bağlı)
                     <input
                       id="ipInput"
                       class=""
                       type="text"
-                      placeholder="IP to query"
+                      placeholder="Sorgulanacak IP"
                       onkeyup="updateIP(this.value)"
                     />
                   </label>
@@ -283,48 +251,27 @@
                     class="pure-button"
                     onclick="navigate()"
                   >
-                    Open
+                    OK
                   </button>
                 </fieldset>
               </form>
             </div>
-
-            <!-- FAQ -->
-            <div class="FAQ">
-              <h2>FAQ</h2>
-              <h3>How do I force IPv4 or IPv6 lookup?</h3>
-              <p>
-                As of 2018-07-25 it's no longer possible to force protocol using
-                the
-                <i>v4</i> and <i>v6</i> subdomains. IPv4 or IPv6 still can be
-                forced by passing the appropiate flag to your client, e.g
-                <code>curl -4</code> or <code>curl -6</code>.
-              </p>
-              <h3>Can I force getting JSON?</h3>
-              <p>
-                Setting the <code>Accept: application/json</code> header works
-                as expected.
-              </p>
-
-              <h3>Is automated use of this service permitted?</h3>
-              <p>
-                Yes, as long as the rate limit is respected. The rate limit is
-                in place to ensure a fair service for all.
-              </p>
-              <p>
-                <em>Please limit automated requests to 1 request per minute</em
-                >. No guarantee is made for requests that exceed this limit.
-                They may be rate-limited, with a 429 status code, or dropped
-                entirely.
-              </p>
-
-              <h3>Can I run my own service?</h3>
-              <p>
-                Yes, the source code and documentation is available on
-                <a href="https://github.com/mpolden/echoip">GitHub</a>.
-              </p>
-            </div>
+          {{ if .Country }}
+          {{ end }} {{ if .Latitude }}
+          <div class="pure-u-1 pure-u-md-1-1">
+            <h2>Harita Konumu</h2>
+            <iframe
+              width="100%"
+              height="350"
+              frameborder="0"
+              scrolling="no"
+              marginheight="0"
+              marginwidth="0"
+              src="https://www.openstreetmap.org/export/embed.html?bbox={{ .BoxLonLeft }}%2C{{ .BoxLatBottom }}%2C{{ .BoxLonRight }}%2C{{ .BoxLatTop }}&amp;layer=mapnik&amp;marker={{ .Latitude }}%2C{{ .Longitude }}"
+            ></iframe>
           </div>
+          {{ end }}               
+          </div>       
         </div>
       </div>
     </div>
