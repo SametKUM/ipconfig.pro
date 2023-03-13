@@ -13,6 +13,10 @@ EXPOSE 8080
 
 COPY --from=build /go/bin/echoip /opt/echoip/
 COPY html /opt/echoip/html
+COPY GeoLite2-ASN.mmdb /opt/echoip/
+COPY GeoLite2-City.mmdb /opt/echoip/
+COPY GeoLite2-Country.mmdb /opt/echoip/
 
 WORKDIR /opt/echoip
 ENTRYPOINT ["/opt/echoip/echoip"]
+CMD ["-H","X-Real-IP","-a","/opt/echoip/GeoLite2-ASN.mmdb","-c","/opt/echoip/GeoLite2-City.mmdb","-f","/opt/echoip/GeoLite2-Country.mmdb"]
