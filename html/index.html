@@ -25,10 +25,6 @@
       integrity="sha384-b92sF+wDNTHrfEtRaYo+EpcA8FUyHOSXrdxKc9XB9kaaX1rSQAgMevW6cYeE5Bdv"
       crossorigin="anonymous"
     />
-
-    {{ template "script.html" . }} {{ template "styles.html" . }}
-  </head>
-  <body>
     <!-- Put this at the end of the <body> tag -->
     <script src="https://swetrix.org/swetrix.js" defer></script>
     <script>
@@ -44,6 +40,9 @@
         referrerpolicy="no-referrer-when-downgrade"
       />
     </noscript>
+    {{ template "script.html" . }} {{ template "styles.html" . }}
+  </head>
+  <body>
     <div class="content">
       <div class="pure-g gutters center">
         <div class="pure-u-1 pure-u-md-2-3">
