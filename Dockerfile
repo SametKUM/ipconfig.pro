@@ -19,4 +19,4 @@ COPY GeoLite2-Country.mmdb /opt/echoip/
 
 WORKDIR /opt/echoip
 ENTRYPOINT ["/opt/echoip/echoip"]
-CMD ["-H","X-Real-IP","-a","/opt/echoip/GeoLite2-ASN.mmdb","-c","/opt/echoip/GeoLite2-City.mmdb","-f","/opt/echoip/GeoLite2-Country.mmdb"]
+CMD ["-H","X-Real-IP","-a","/opt/echoip/GeoLite2-ASN.mmdb","-c","/opt/echoip/GeoLite2-City.mmdb","-f","/opt/echoip/GeoLite2-Country.mmdb","-r"]
