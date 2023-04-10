@@ -3,49 +3,49 @@
 ![Build Status](https://github.com/mpolden/echoip/workflows/ci/badge.svg)
 
 A simple service for looking up your IP address. This is the code that powers
-https://ifconfig.co.
+https://ipconfig.pro
 
 ## Usage
 
 Just the business, please:
 
 ```
-$ curl ifconfig.co
+$ curl ipconfig.pro
 127.0.0.1
 
-$ http ifconfig.co
+$ http ipconfig.pro
 127.0.0.1
 
-$ wget -qO- ifconfig.co
+$ wget -qO- ipconfig.pro
 127.0.0.1
 
-$ fetch -qo- https://ifconfig.co
+$ fetch -qo- https://ipconfig.pro
 127.0.0.1
 
-$ bat -print=b ifconfig.co/ip
+$ bat -print=b ipconfig.pro/ip
 127.0.0.1
 ```
 
 Country and city lookup:
 
 ```
-$ curl ifconfig.co/country
+$ curl ipconfig.pro/country
 Elbonia
 
-$ curl ifconfig.co/country-iso
+$ curl ipconfig.pro/country-iso
 EB
 
-$ curl ifconfig.co/city
+$ curl ipconfig.pro/city
 Bornyasherk
 
-$ curl ifconfig.co/asn
+$ curl ipconfig.pro/asn
 AS59795
 ```
 
 As JSON:
 
 ```
-$ curl -H 'Accept: application/json' ifconfig.co  # or curl ifconfig.co/json
+$ curl -H 'Accept: application/json' ipconfig.pro  # or curl ipconfig.pro/json
 {
   "city": "Bornyasherk",
   "country": "Elbonia",
@@ -54,17 +54,6 @@ $ curl -H 'Accept: application/json' ifconfig.co  # or curl ifconfig.co/json
   "ip_decimal": 2130706433,
   "asn": "AS59795",
   "asn_org": "Hosting4Real"
-}
-```
-
-Port testing:
-
-```
-$ curl ifconfig.co/port/80
-{
-  "ip": "127.0.0.1",
-  "port": 80,
-  "reachable": false
 }
 ```
 
