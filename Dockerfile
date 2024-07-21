@@ -8,7 +8,7 @@ ENV GO111MODULE=on CGO_ENABLED=0
 RUN make
 
 # Run
-FROM scratch
+FROM alpine:latest
 EXPOSE 8080
 
 COPY --from=build /go/bin/echoip /opt/echoip/
