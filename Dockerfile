@@ -8,14 +8,15 @@ ENV GO111MODULE=on CGO_ENABLED=0
 RUN make
 
 # Run
-FROM scratch
+FROM alpine:latest
 EXPOSE 8080
 
 COPY --from=build /go/bin/echoip /opt/echoip/
 COPY html /opt/echoip/html
-COPY GeoLite2-ASN.mmdb /opt/echoip/
-COPY GeoLite2-City.mmdb /opt/echoip/
-COPY GeoLite2-Country.mmdb /opt/echoip/
+RUN apk --no-cache add curl
+RUN curl -L -o /opt/echoip/GeoLite2-ASN.mmdb "https://git.io/GeoLite2-ASN.mmdb"
+RUN curl -L -o /opt/echoip/GeoLite2-City.mmdb "https://git.io/GeoLite2-City.mmdb"
+RUN curl -L -o /opt/echoip/GeoLite2-Country.mmdb "https://git.io/GeoLite2-Country.mmdb"
 
 WORKDIR /opt/echoip
 ENTRYPOINT ["/opt/echoip/echoip"]
