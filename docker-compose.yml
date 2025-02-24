@@ -1,0 +1,15 @@
+version: '3.8'
+
+services:
+  ipconfigpro:
+    build: .
+    container_name: ipconfigpro
+    ports:
+      - "8080:8080"
+    networks:
+      - wp_net
+    restart: unless-stopped
+
+networks:
+  wp_net:
+    external: true
