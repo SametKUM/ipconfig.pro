@@ -7,9 +7,9 @@ services:
     ports:
       - "8080:8080"
     networks:
-      - wp_net
+      - linuxpedicom_wp_net
     restart: unless-stopped
 
 networks:
-  wp_net:
+  linuxpedicom_wp_net:
     external: true
