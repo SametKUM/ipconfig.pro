@@ -20,4 +20,4 @@ RUN curl -L -o /opt/echoip/GeoLite2-Country.mmdb "https://git.io/GeoLite2-Countr
 
 WORKDIR /opt/echoip
 ENTRYPOINT ["/opt/echoip/echoip"]
-CMD ["-H","X-Real-IP","-a","/opt/echoip/GeoLite2-ASN.mmdb","-c","/opt/echoip/GeoLite2-City.mmdb","-f","/opt/echoip/GeoLite2-Country.mmdb","-r"]
+CMD ["-H","CF-Connecting-IP","-a","/opt/echoip/GeoLite2-ASN.mmdb","-c","/opt/echoip/GeoLite2-City.mmdb","-f","/opt/echoip/GeoLite2-Country.mmdb","-r"]
