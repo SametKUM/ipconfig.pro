@@ -48,7 +48,9 @@
         <div class="pure-u-1 pure-u-md-2-3">
           <div class="l-box">
             <h1>{{ .Host }} — IP Adresim nedir?</h1>
-            <p><code class="ip">{{ .IP }}</code></p>
+            <div id="main-ip-display">
+              <p><code class="ip">{{ .IP }}</code></p>
+            </div>
             <p>
               Kendi IP adresinizi ve onunla ilgili bilgileri bulmak için en iyi araç.
             </p>
@@ -193,6 +195,27 @@
                   onclick="changeInput(this.name, this)"
                 >
                   json
+                </button>
+                <button
+                  name="ipv4"
+                  class="pure-button widget-select"
+                  onclick="changeInput(this.name, this)"
+                >
+                  ipv4
+                </button>
+                <button
+                  name="ipv6"
+                  class="pure-button widget-select"
+                  onclick="changeInput(this.name, this)"
+                >
+                  ipv6
+                </button>
+                <button
+                  name="both"
+                  class="pure-button widget-select"
+                  onclick="changeInput(this.name, this)"
+                >
+                  both
                 </button>
                 <input
                   id="portInput"
