@@ -240,51 +240,6 @@ func (s *Server) CLIASNHandler(w http.ResponseWriter, r *http.Request) *appError
 	return nil
 }
 
-func (s *Server) CLIIPv4Handler(w http.ResponseWriter, r *http.Request) *appError {
-	ipv4, err := s.getClientIPv4(r)
-	if err != nil {
-		return badRequest(err).WithMessage(err.Error()).AsJSON()
-	}
-	if ipv4 == nil {
-		fmt.Fprintln(w, "IPv4 address not available")
-		return nil
-	}
-	fmt.Fprintln(w, ipv4.String())
-	return nil
-}
-
-func (s *Server) CLIIPv6Handler(w http.ResponseWriter, r *http.Request) *appError {
-	ipv6, err := s.getClientIPv6(r)
-	if err != nil {
-		return badRequest(err).WithMessage(err.Error()).AsJSON()
-	}
-	if ipv6 == nil {
-		fmt.Fprintln(w, "IPv6 address not available")
-		return nil
-	}
-	fmt.Fprintln(w, ipv6.String())
-	return nil
-}
-
-func (s *Server) CLIBothIPHandler(w http.ResponseWriter, r *http.Request) *appError {
-	ipv4, _ := s.getClientIPv4(r)
-	ipv6, _ := s.getClientIPv6(r)
-
-	if ipv4 == nil && ipv6 == nil {
-		return badRequest(fmt.Errorf("no IP addresses available")).WithMessage("No IP addresses available").AsJSON()
-	}
-
-	if ipv4 != nil {
-		fmt.Fprintf(w, "IPv4: %s\n", ipv4.String())
-	}
-	if ipv6 != nil {
-		fmt.Fprintf(w, "IPv6: %s\n", ipv6.String())
-	}
-	return nil
-}
-
-
-
 func (s *Server) JSONHandler(w http.ResponseWriter, r *http.Request) *appError {
 	response, err := s.newResponse(r)
 	if err != nil {
@@ -317,87 +272,6 @@ func (s *Server) PortHandler(w http.ResponseWriter, r *http.Request) *appError {
 	w.Header().Set("Content-Type", jsonMediaType)
 	w.Write(b)
 	return nil
-}
-
-func (s *Server) JSONBothIPHandler(w http.ResponseWriter, r *http.Request) *appError {
-	ipv4, _ := s.getClientIPv4(r)
-	ipv6, _ := s.getClientIPv6(r)
-
-	type BothIPResponse struct {
-		IPv4 *net.IP `json:"ipv4,omitempty"`
-		IPv6 *net.IP `json:"ipv6,omitempty"`
-	}
-
-	response := BothIPResponse{
-		IPv4: ipv4,
-		IPv6: ipv6,
-	}
-
-	b, err := json.MarshalIndent(response, "", "  ")
-	if err != nil {
-		return internalServerError(err).AsJSON()
-	}
-	w.Header().Set("Content-Type", jsonMediaType)
-	w.Write(b)
-	return nil
-}
-
-// getClientIPv4 attempts to get the client's IPv4 address
-func (s *Server) getClientIPv4(r *http.Request) (*net.IP, error) {
-	// Try to get IP from custom headers first
-	for _, header := range s.IPHeaders {
-		headerValue := r.Header.Get(header)
-		if headerValue != "" {
-			if http.CanonicalHeaderKey(header) == "X-Forwarded-For" {
-				headerValue = ipFromForwardedForHeader(headerValue)
-			}
-			ip := net.ParseIP(headerValue)
-			if ip != nil && ip.To4() != nil {
-				return &ip, nil
-			}
-		}
-	}
-
-	// Try to get from RemoteAddr
-	host, _, err := net.SplitHostPort(r.RemoteAddr)
-	if err != nil {
-		return nil, err
-	}
-	ip := net.ParseIP(host)
-	if ip != nil && ip.To4() != nil {
-		return &ip, nil
-	}
-
-	return nil, nil
-}
-
-// getClientIPv6 attempts to get the client's IPv6 address
-func (s *Server) getClientIPv6(r *http.Request) (*net.IP, error) {
-	// Try to get IP from custom headers first
-	for _, header := range s.IPHeaders {
-		headerValue := r.Header.Get(header)
-		if headerValue != "" {
-			if http.CanonicalHeaderKey(header) == "X-Forwarded-For" {
-				headerValue = ipFromForwardedForHeader(headerValue)
-			}
-			ip := net.ParseIP(headerValue)
-			if ip != nil && ip.To4() == nil && ip.To16() != nil {
-				return &ip, nil
-			}
-		}
-	}
-
-	// Try to get from RemoteAddr
-	host, _, err := net.SplitHostPort(r.RemoteAddr)
-	if err != nil {
-		return nil, err
-	}
-	ip := net.ParseIP(host)
-	if ip != nil && ip.To4() == nil && ip.To16() != nil {
-		return &ip, nil
-	}
-
-	return nil, nil
 }
 
 func (s *Server) cacheResizeHandler(w http.ResponseWriter, r *http.Request) *appError {
@@ -551,10 +425,6 @@ func (s *Server) Handler() http.Handler {
 	r.Route("GET", "/", s.CLIHandler).MatcherFunc(cliMatcher)
 	r.Route("GET", "/", s.CLIHandler).Header("Accept", textMediaType)
 	r.Route("GET", "/ip", s.CLIHandler)
-	r.Route("GET", "/ipv4", s.CLIIPv4Handler)
-	r.Route("GET", "/ipv6", s.CLIIPv6Handler)
-	r.Route("GET", "/both", s.CLIBothIPHandler)
-	r.Route("GET", "/both/json", s.JSONBothIPHandler)
 	if !s.gr.IsEmpty() {
 		r.Route("GET", "/country", s.CLICountryHandler)
 		r.Route("GET", "/country-iso", s.CLICountryISOHandler)

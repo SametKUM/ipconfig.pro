@@ -18,69 +18,6 @@
      reset()
      setcommdStr()
      changeInput("ip")
-     loadBothIPs()
-  }
-
-  function loadBothIPs() {
-    let ipv4 = null;
-    let ipv6 = null;
-    let completed = 0;
-    
-    function updateMainDisplay() {
-      const mainDisplay = document.getElementById('main-ip-display');
-      let html = '';
-      
-      if (ipv4 && ipv6) {
-        // Hem IPv4 hem IPv6 var
-        html = `
-          <p><code class="ip">${ipv4}</code></p>
-          <p><code class="ip">${ipv6}</code></p>
-        `;
-      } else if (ipv4) {
-        // Sadece IPv4 var
-        html = `<p><code class="ip">${ipv4}</code></p>`;
-      } else if (ipv6) {
-        // Sadece IPv6 var
-        html = `<p><code class="ip">${ipv6}</code></p>`;
-      } else {
-        // Hiçbiri yok
-        html = `<p><code class="ip">IP adresi bulunamadı</code></p>`;
-      }
-      
-      mainDisplay.innerHTML = html;
-    }
-    
-    // Load IPv4
-    fetch('/ipv4')
-      .then(response => response.text())
-      .then(data => {
-        const trimmed = data.trim();
-        if (trimmed !== 'IPv4 address not available') {
-          ipv4 = trimmed;
-        }
-        completed++;
-        if (completed === 2) updateMainDisplay();
-      })
-      .catch(error => {
-        completed++;
-        if (completed === 2) updateMainDisplay();
-      });
-    
-    // Load IPv6
-    fetch('/ipv6')
-      .then(response => response.text())
-      .then(data => {
-        const trimmed = data.trim();
-        if (trimmed !== 'IPv6 address not available') {
-          ipv6 = trimmed;
-        }
-        completed++;
-        if (completed === 2) updateMainDisplay();
-      })
-      .catch(error => {
-        completed++;
-        if (completed === 2) updateMainDisplay();
-      });
   }
 
   function reset() {
@@ -117,15 +54,6 @@
         output.innerText = data["ip"]
         path = ""
         break
-      case "ipv4":
-        fetchAndDisplay("ipv4")
-        break
-      case "ipv6":
-        fetchAndDisplay("ipv6")
-        break
-      case "both":
-        fetchAndDisplay("both")
-        break
       default:
         output.innerText = data[path]
     }
@@ -156,19 +84,5 @@
     ipQuery = `?ip=${ip}`;
     setcommdStr()
     changeInput("ip", null)
-  }
-
-
-
-  function fetchAndDisplay(endpoint) {
-    const url = `/${endpoint}${ipQuery}`;
-    fetch(url)
-      .then(response => response.text())
-      .then(data => {
-        output.innerText = data.trim();
-      })
-      .catch(error => {
-        output.innerText = `Error: ${error.message}`;
-      });
   }
 </script>
