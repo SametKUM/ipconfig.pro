@@ -1,23 +1,28 @@
 # Build
-FROM golang:1.15-buster AS build
+FROM golang:1.23-bookworm AS build
 WORKDIR /go/src/github.com/mpolden/echoip
 COPY . .
-
-# Must build without cgo because libc is unavailable in runtime image
 ENV GO111MODULE=on CGO_ENABLED=0
 RUN make
 
+# GeoIP databases
+FROM alpine:3.20 AS geoip
+RUN apk --no-cache add curl && \
+    mkdir -p /geoip && \
+    curl -L -o /geoip/GeoLite2-ASN.mmdb "https://git.io/GeoLite2-ASN.mmdb" && \
+    curl -L -o /geoip/GeoLite2-City.mmdb "https://git.io/GeoLite2-City.mmdb" && \
+    curl -L -o /geoip/GeoLite2-Country.mmdb "https://git.io/GeoLite2-Country.mmdb"
+
 # Run
-FROM alpine:latest
+FROM alpine:3.20
 EXPOSE 8080
-
-COPY --from=build /go/bin/echoip /opt/echoip/
-COPY html /opt/echoip/html
-RUN apk --no-cache add curl
-RUN curl -L -o /opt/echoip/GeoLite2-ASN.mmdb "https://git.io/GeoLite2-ASN.mmdb"
-RUN curl -L -o /opt/echoip/GeoLite2-City.mmdb "https://git.io/GeoLite2-City.mmdb"
-RUN curl -L -o /opt/echoip/GeoLite2-Country.mmdb "https://git.io/GeoLite2-Country.mmdb"
-
+RUN adduser -D -h /opt/echoip echoip
 WORKDIR /opt/echoip
+
+COPY --from=build /go/bin/echoip .
+COPY --from=geoip /geoip/*.mmdb ./
+COPY html html
+
+USER echoip
 ENTRYPOINT ["/opt/echoip/echoip"]
-CMD ["-H","CF-Connecting-IP","-a","/opt/echoip/GeoLite2-ASN.mmdb","-c","/opt/echoip/GeoLite2-City.mmdb","-f","/opt/echoip/GeoLite2-Country.mmdb","-r"]
+CMD ["-H","CF-Connecting-IP","-a","GeoLite2-ASN.mmdb","-c","GeoLite2-City.mmdb","-f","GeoLite2-Country.mmdb","-r"]
